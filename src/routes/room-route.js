@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.get("/", roomController.getData);
 router.post("/enter", roomController.enter);
-router.post("/sos", roomController.createSOS);
-router.delete("/sos", roomController.cancelSOS);
+router.post("/sos/:userId", roomController.createSOS);
+router.delete("/sos/:userId", roomController.cancelSOS);
+router.post("/remark/:userId", roomController.creteRemark);
 
 module.exports = router;

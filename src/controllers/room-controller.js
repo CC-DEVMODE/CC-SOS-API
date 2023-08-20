@@ -50,7 +50,18 @@ exports.createSOS = async (req, res, next) => {
 exports.cancelSOS = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    await roomServices.createSOS(userId);
+    await roomServices.cancelSOS(userId);
+    res.status(201).json({ result: "success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.creteRemark = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { content } = req.body;
+    await roomServices.createRemark(userId, content);
     res.status(201).json({ result: "success" });
   } catch (error) {
     next(error);

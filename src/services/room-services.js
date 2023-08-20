@@ -49,3 +49,9 @@ exports.createSOS = (userId) =>
 
 exports.cancelSOS = (userId) =>
   room.update({ helpStatus: 0 }, { where: { userId } });
+
+exports.createRemark = (userId, content) =>
+  remark.create({
+    userId,
+    content,
+  });
