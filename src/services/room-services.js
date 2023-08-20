@@ -1,11 +1,51 @@
-const { user } = require("../models");
+const { room, user, remark } = require("../models");
 
-exports.checkin = (userId, tableId) =>
-  user.update(
-    { tableId },
+exports.getData = () =>
+  room.findAll({
+    include: {
+      model: user,
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+      include: {
+        model: remark,
+      },
+    },
+  });
+
+exports.checkPosition = (positionId) =>
+  room.findOne({
+    where: {
+      positionId,
+    },
+    include: {
+      model: user,
+      attributes: ["id", "name"],
+    },
+  });
+
+exports.getPosition = (userId, positionId) =>
+  room.update(
+    { userId },
     {
       where: {
-        id: userId,
+        positionId,
       },
     }
   );
+
+exports.leavePosition = (userId) =>
+  room.update(
+    { userId: null },
+    {
+      where: {
+        userId,
+      },
+    }
+  );
+
+exports.createSOS = (userId) =>
+  room.update({ helpStatus: 1 }, { where: { userId } });
+
+exports.cancelSOS = (userId) =>
+  room.update({ helpStatus: 0 }, { where: { userId } });

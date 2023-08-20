@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      status: {
+      learningStatus: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
         // '0:inactive 1: red 2:yellow 3:green'
@@ -27,14 +27,29 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      tableId:{
-        type: DataTypes.INTEGER,
-      }
+      aboutMe: {
+        type: DataTypes.STRING,
+      },
     },
     {
       underscored: true,
     }
   );
+
+  user.associate = (models) => {
+    user.hasMany(models.room, {
+      foreignKey: {
+        name: "userId",
+      },
+      onDelete: "RESTRICT",
+    });
+    user.hasMany(models.remark, {
+      foreignKey: {
+        name: "userId",
+      },
+      onDelete: "RESTRICT",
+    });
+  };
 
   return user;
 };
