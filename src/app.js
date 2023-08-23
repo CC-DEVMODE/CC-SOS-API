@@ -4,6 +4,9 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const http = require("http");
+const socketIo = require("socket.io");
+const { Server } = require("socket.io");
 
 const roomRoute = require("./routes/room-route");
 
@@ -11,6 +14,21 @@ const notFoundMiddleware = require("./middlewares/not-found");
 const errorMiddleware = require("./middlewares/error");
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected", socket.id);
+});
+
+app.set("socketio", io);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -34,4 +52,4 @@ app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => console.log("server running on port " + port));
+server.listen(port, () => console.log("server running on port " + port));

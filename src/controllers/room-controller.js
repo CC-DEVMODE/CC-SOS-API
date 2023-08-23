@@ -11,6 +11,7 @@ exports.getData = async (req, res, next) => {
 
 exports.enter = async (req, res, next) => {
   try {
+    const io = req.app.get("socketio");
     const { userId, positionId } = req.body;
     const checkPosition = await roomServices.checkPosition(positionId);
     if (!checkPosition) {
@@ -31,6 +32,8 @@ exports.enter = async (req, res, next) => {
     }
     await roomServices.leavePosition(userId);
     await roomServices.getPosition(userId, positionId);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
     res.status(201).json({ result: "success" });
   } catch (err) {
     next(err);
@@ -39,8 +42,11 @@ exports.enter = async (req, res, next) => {
 
 exports.createSOS = async (req, res, next) => {
   try {
+    const io = req.app.get("socketio");
     const { userId } = req.params;
     await roomServices.createSOS(userId);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
     res.status(201).json({ result: "success" });
   } catch (error) {
     next(error);
@@ -49,8 +55,11 @@ exports.createSOS = async (req, res, next) => {
 
 exports.cancelSOS = async (req, res, next) => {
   try {
+    const io = req.app.get("socketio");
     const { userId } = req.params;
     await roomServices.cancelSOS(userId);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
     res.status(201).json({ result: "success" });
   } catch (error) {
     next(error);
@@ -59,9 +68,12 @@ exports.cancelSOS = async (req, res, next) => {
 
 exports.creteRemark = async (req, res, next) => {
   try {
+    const io = req.app.get("socketio");
     const { userId } = req.params;
     const { content } = req.body;
     await roomServices.createRemark(userId, content);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
     res.status(201).json({ result: "success" });
   } catch (error) {
     next(error);

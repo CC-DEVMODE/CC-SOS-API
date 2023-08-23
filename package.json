@@ -18,7 +18,8 @@
     "express-rate-limit": "^6.9.0",
     "helmet": "^7.0.0",
     "mysql2": "^3.6.0",
-    "sequelize": "^6.32.1"
+    "sequelize": "^6.32.1",
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
