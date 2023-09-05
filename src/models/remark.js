@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: "RESTRICT",
     });
+    remark.belongsTo(models.user, {
+      foreignKey: {
+        name: "recorderId",
+      },
+      onDelete: "RESTRICT",
+    });
   };
 
   return remark;

@@ -13,6 +13,7 @@ exports.enter = async (req, res, next) => {
   try {
     const io = req.app.get("socketio");
     const { userId, positionId } = req.body;
+    console.log(req.body);
     const checkPosition = await roomServices.checkPosition(positionId);
     if (!checkPosition) {
       res.status(404).json({ result: "The position is none" });

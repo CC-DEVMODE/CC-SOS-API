@@ -5,9 +5,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const http = require("http");
-const socketIo = require("socket.io");
 const { Server } = require("socket.io");
 
+const authRoute = require("./routes/auth-route");
 const roomRoute = require("./routes/room-route");
 
 const notFoundMiddleware = require("./middlewares/not-found");
@@ -46,6 +46,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+app.use("/auth", authRoute);
 app.use("/room", roomRoute);
 
 app.use(notFoundMiddleware);
