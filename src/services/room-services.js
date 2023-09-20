@@ -1,4 +1,5 @@
 const { room, user, remark } = require("../models");
+const { Op } = require("sequelize");
 
 exports.getData = () =>
   room.findAll({
@@ -43,6 +44,17 @@ exports.leavePosition = (userId) =>
       },
     }
   );
+
+exports.taLogOut = (userId) =>
+  room.destroy({
+    where: {
+      userId,
+      positionId: { [Op.gt]: 50 },
+    },
+  });
+
+exports.createPosition = (userId, positionId) =>
+  room.create({ positionId, userId });
 
 exports.createSOS = (userId) =>
   room.update({ helpStatus: 1 }, { where: { userId } });

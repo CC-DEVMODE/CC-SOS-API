@@ -10,6 +10,7 @@ const { Server } = require("socket.io");
 const authRoute = require("./routes/auth-route");
 const roomRoute = require("./routes/room-route");
 
+const authenticateMiddleware = require("./middlewares/authenticate");
 const notFoundMiddleware = require("./middlewares/not-found");
 const errorMiddleware = require("./middlewares/error");
 
@@ -47,7 +48,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoute);
-app.use("/room", roomRoute);
+app.use("/room", authenticateMiddleware, roomRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

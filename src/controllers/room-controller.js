@@ -9,11 +9,11 @@ exports.getData = async (req, res, next) => {
   }
 };
 
-exports.enter = async (req, res, next) => {
+exports.studentEnter = async (req, res, next) => {
   try {
     const io = req.app.get("socketio");
-    const { userId, positionId } = req.body;
-    console.log(req.body);
+    const { positionId } = req.body;
+    const userId = req.user.id;
     const checkPosition = await roomServices.checkPosition(positionId);
     if (!checkPosition) {
       res.status(404).json({ result: "The position is none" });
@@ -36,6 +36,47 @@ exports.enter = async (req, res, next) => {
     const data = await roomServices.getData();
     io.emit("toWeb", { result: data });
     res.status(201).json({ result: "success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.taEnter = async (req, res, next) => {
+  try {
+    const io = req.app.get("socketio");
+    const userId = req.user.id;
+    const currentRoom = await roomServices.getData();
+    const lastId = currentRoom[currentRoom.length - 1].positionId;
+    await roomServices.createPosition(userId, lastId + 1);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
+    res.status(201).json("success");
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.studentLogOut = async (req, res, next) => {
+  try {
+    const io = req.app.get("socketio");
+    const userId = req.user.id;
+    await roomServices.leavePosition(userId);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
+    res.status(201).json("success");
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.taLogOut = async (req, res, next) => {
+  try {
+    const io = req.app.get("socketio");
+    const userId = req.user.id;
+    await roomServices.taLogOut(userId);
+    const data = await roomServices.getData();
+    io.emit("toWeb", { result: data });
+    res.status(201).json("success");
   } catch (err) {
     next(err);
   }
