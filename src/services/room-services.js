@@ -67,3 +67,10 @@ exports.createRemark = (userId, content) =>
     userId,
     content,
   });
+
+exports.getRemark = (userId) =>
+  remark.findAll({
+    where: { userId },
+    order: [["createdAt", "DESC"]],
+    limit: 5,
+  });

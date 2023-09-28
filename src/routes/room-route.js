@@ -12,5 +12,6 @@ router.delete("/student/logout", roomController.studentLogOut);
 router.post("/sos/:userId", roomController.createSOS);
 router.delete("/sos/:userId", roomController.cancelSOS);
 router.post("/remark/:userId", roomController.creteRemark);
+router.get("/remark/:userId", roomController.getRemark);
 
 module.exports = router;

@@ -121,3 +121,13 @@ exports.creteRemark = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getRemark = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const rs = await roomServices.getRemark(userId);
+    res.status(201).json(rs);
+  } catch (error) {
+    next(error);
+  }
+};
